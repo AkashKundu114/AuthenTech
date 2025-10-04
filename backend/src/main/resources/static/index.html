@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OCR Upload</title>
+</head>
+<body>
+  <h2>Upload Image for OCR</h2>
+  <form id="ocrForm">
+    <label for="fileInput">Choose an image file:</label>
+    <input type="file" id="fileInput" name="file" accept="image/*" required title="Upload an image file for OCR" placeholder="Select image file" />
+    <button type="submit">Extract Text</button>
+  </form>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById("ocrForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("file", document.getElementById("fileInput").files[0]);
+
+      const res = await fetch("/api/ocr/upload", {
+        method: "POST",
+        body: formData
+      });
+      const text = await res.text();
+      document.getElementById("result").textContent = text;
+    });
+  </script>
+</body>
+</html>

@@ -1,22 +1,14 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE = "http://localhost:8080/api";
 
-export const scanPdfForKeywords = async (file, keywords, token) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('keywords', keywords);
+export const uploadCertificate = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
 
-    const response = await fetch(`${API_BASE_URL}/ocr/scan-keywords`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-    });
+  const response = await fetch(`${API_BASE}/ocr/upload`, {
+    method: "POST",
+    body: formData,
+  });
 
-    if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(errorData || 'Failed to scan the document.');
-    }
-
-    return response.json();
+  if (!response.ok) throw new Error("Upload failed");
+  return response.text();
 };
